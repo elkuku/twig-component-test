@@ -1,0 +1,75 @@
+<!-- Fixed navbar -->
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('app_default') }}">Playground</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">GuestMenu</a>
+                </li>
+                {% if app.user %}
+                    <li>
+                        <a class="nav-link" href="#">UserMenu</a>
+                    </li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a class="nav-link" href="#">Admin</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+            {% if app.user %}
+                <div class="dropdown dropstart">
+                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi-person"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="{{ path('app_profile') }}"><i class="bi-person"></i> Profile</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#"><i class="bi-star"></i> Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ path('logout') }}" title="Logout">
+                                <i class="bi-box-arrow-up-right"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            {% else %}
+                <ul class="navbar-nav mb-2 mb-md-0 d-flex">
+                    <li class="nav-item">
+                        <a class="nav-link" accesskey="l" href="{{ path('login') }}" title="Login">
+                            <i class="bi-box-arrow-in-down-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            {% endif %}
+
+            {% include '_/_theme_selector.html.twig' %}
+
+        </div>
+    </div>
+</nav>

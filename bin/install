@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Install script
+#
+# License: WTFPL
+# Author: Nikolai Plath
+#
+
+check() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "❌ ERROR: Command '$1' could not be found on your system :("
+    exit 1
+  fi
+}
+
+check "composer"
+check "docker-compose"
+check "symfony"
+
+# Ensure we're in the right spot. @todo this only works in bash :(
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && cd .. && pwd)"
+cd "$DIR" || exit 1
+
+echo "🚀 Setting up dev env in $DIR ..."
+
+composer install
+
+docker-compose up -d
+
+#Docker needs some time to start @todo check if docker container is running? `docker ps` maybe?
+echo -n 'Waiting for db... '
+for value in {5..1}; do
+  echo -n "$value..."
+  sleep 1
+done
+echo 'hopefully... =;)'
+
+symfony console doctrine:migrations:migrate -n
+
+symfony server:start -d
+
+symfony open:local
+
+echo "✨ hF =;) 🤪"
